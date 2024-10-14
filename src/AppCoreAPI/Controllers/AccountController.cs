@@ -95,6 +95,28 @@ namespace AppCoreAPI.Controllers
             return BadRequest(new ApiResponse(400, "Can not add root folder into database"));
         }
 
+        [HttpGet("username-exists")]
+        public async Task<ActionResult<bool>> CheckUserNameExistAsync([FromQuery] string userName)
+        {
+            return await _userManager.FindByNameAsync(userName) != null;
+        }
+
+        [HttpGet("get-users")]
+        public async Task<ActionResult> GetUsers(string userName)
+        {
+            if (string.IsNullOrEmpty(userName))
+            {
+                var users = await _userManager.Users.ToListAsync();
+                return Ok(_mapper.Map<List<AppUser>, List<UserDto>>(users));
+            }
+            else
+            {
+                var users = await _userManager.Users.Where(x => x.UserName.Contains(userName.ToLower())).ToListAsync();
+                return Ok(_mapper.Map<List<AppUser>, List<UserDto>>(users));
+            }
+        }
+
+
         private async Task<bool> UserExists(string username)
         {
             return await _userManager.Users.AnyAsync(x => x.UserName == username.ToLower());
