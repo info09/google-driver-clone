@@ -1,14 +1,13 @@
 ﻿using AppCoreAPI.Data.Entities;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
 namespace AppCoreAPI.Data
 {
-    public class DataContext : IdentityDbContext<AppUser, AppRole, int>
+    public class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, int>
     {
-        public DataContext(DbContextOptions options) : base(options) { }
+        public ApplicationDbContext(DbContextOptions options) : base(options) { }
 
         public DbSet<RootFolder> RootFolders { get; set; }
         public DbSet<SharedToUser> SharedToUsers { get; set; }

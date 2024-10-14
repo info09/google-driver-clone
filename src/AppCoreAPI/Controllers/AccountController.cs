@@ -3,6 +3,7 @@ using AppCoreAPI.Dtos;
 using AppCoreAPI.Errors;
 using AppCoreAPI.SeedWorks.Interfaces;
 using AppCoreAPI.Services.Interfaces;
+using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +18,7 @@ namespace AppCoreAPI.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly IMapper _mapper;
 
         public AccountController(ITokenService tokenService, IUnitOfWork unitOfWork, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
         {
@@ -66,14 +68,14 @@ namespace AppCoreAPI.Controllers
             if (!roleResult.Succeeded)
                 return BadRequest(result.Errors);
 
-            //var rootFolder = new RootFolderDto
-            //{
-            //    Name = Guid.NewGuid().ToString().Substring(0, 10),
-            //    UserId = user.Id
-            //};
+            var rootFolder = new RootFolderDto
+            {
+                Name = Guid.NewGuid().ToString().Substring(0, 10),
+                UserId = user.Id
+            };
 
-            //var rootFolderDb = _mapper.Map<RootFolderDto, RootFolder>(rootFolder);
-            //_unitOfWork.RootFolderRepository.Add(rootFolderDb);
+            var rootFolderDb = _mapper.Map<RootFolderDto, RootFolder>(rootFolder);
+            _unitOfWork.RootFolderRepository.Add(rootFolderDb);
 
             if (await _unitOfWork.Complete())
             {

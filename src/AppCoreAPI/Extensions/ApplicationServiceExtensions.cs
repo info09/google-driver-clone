@@ -1,5 +1,6 @@
 ﻿using AppCoreAPI.Data;
 using AppCoreAPI.Errors;
+using AppCoreAPI.Helpers;
 using AppCoreAPI.SeedWorks;
 using AppCoreAPI.SeedWorks.Interfaces;
 using AppCoreAPI.Services;
@@ -16,8 +17,9 @@ namespace AppCoreAPI.Extensions
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IGoogleDriveService, GoogleDriveService>();
+            services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
 
-            services.AddDbContext<DataContext>(options =>
+            services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
             });

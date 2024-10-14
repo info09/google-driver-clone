@@ -1,16 +1,23 @@
 ﻿using AppCoreAPI.Data;
+using AppCoreAPI.Repositories;
+using AppCoreAPI.Repositories.Interfaces;
 using AppCoreAPI.SeedWorks.Interfaces;
 
 namespace AppCoreAPI.SeedWorks
 {
     public class UnitOfWork : IUnitOfWork
     {
-        DataContext _context;
+        ApplicationDbContext _context;
 
-        public UnitOfWork(DataContext context)
+        public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
         }
+
+        public IRootFolderRepository RootFolderRepository => new RootFolderRepository(_context);
+
+        public ISharedToUserRepository SharedToUserRepository => new SharedToUserRepository(_context);
+
         public async Task<bool> Complete()
         {
             return await _context.SaveChangesAsync() > 0;
