@@ -45,5 +45,56 @@ namespace AppCoreAPI.Controllers
                 Token = await _tokenService.CreateTokenAsync(user)
             };
         }
+
+        [HttpPost("register")]
+        public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
+        {
+            if (await UserExists(registerDto.UserName))
+                return BadRequest("Username is taken");
+
+            var user = new AppUser
+            {
+                UserName = registerDto.UserName.ToLower(),
+                DisplayName = registerDto.DisplayName,
+            };
+
+            var result = await _userManager.CreateAsync(user, registerDto.Password);
+            if (!result.Succeeded)
+                return BadRequest(result.Errors);
+
+            var roleResult = await _userManager.AddToRoleAsync(user, "User");
+            if (!roleResult.Succeeded)
+                return BadRequest(result.Errors);
+
+            //var rootFolder = new RootFolderDto
+            //{
+            //    Name = Guid.NewGuid().ToString().Substring(0, 10),
+            //    UserId = user.Id
+            //};
+
+            //var rootFolderDb = _mapper.Map<RootFolderDto, RootFolder>(rootFolder);
+            //_unitOfWork.RootFolderRepository.Add(rootFolderDb);
+
+            if (await _unitOfWork.Complete())
+            {
+                // tao thu muc root
+                //var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", rootFolder.Name);
+                //await _googleDriveService.CreateDirectory(path);
+
+                return Ok(new UserDto
+                {
+                    UserName = user.UserName,
+                    DisplayName = user.DisplayName,
+                    Token = await _tokenService.CreateTokenAsync(user)
+                });
+            }
+
+            return BadRequest(new ApiResponse(400, "Can not add root folder into database"));
+        }
+
+        private async Task<bool> UserExists(string username)
+        {
+            return await _userManager.Users.AnyAsync(x => x.UserName == username.ToLower());
+        }
     }
 }
