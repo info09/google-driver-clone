@@ -20,12 +20,13 @@ namespace AppCoreAPI.Controllers
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IMapper _mapper;
 
-        public AccountController(ITokenService tokenService, IUnitOfWork unitOfWork, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+        public AccountController(ITokenService tokenService, IUnitOfWork unitOfWork, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IMapper mapper)
         {
             _tokenService = tokenService;
             _unitOfWork = unitOfWork;
             _userManager = userManager;
             _signInManager = signInManager;
+            _mapper = mapper;
         }
 
         [HttpPost("login")]

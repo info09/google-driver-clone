@@ -9,6 +9,7 @@ namespace AppCoreAPI.Helpers
         public AutoMapperProfiles()
         {
             CreateMap<RootFolder, RootFolderDto>();
+            CreateMap<RootFolderDto, RootFolder>();
             CreateMap<AppUser, UserDto>();
             CreateMap<SharedToUserAddDto, SharedToUser>().ForMember(d => d.ShortUrl, o => o.MapFrom<ShareUrlResolver>());
         }
