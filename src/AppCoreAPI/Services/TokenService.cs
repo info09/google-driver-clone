@@ -39,12 +39,20 @@ namespace AppCoreAPI.Services
                 Expires = DateTime.Now.AddDays(1),
                 SigningCredentials = creds
             };
-
             var tokenHandler = new JwtSecurityTokenHandler();
 
-            var token = tokenHandler.CreateToken(tokenDescriptor);
+            try
+            {
+                var token = tokenHandler.CreateToken(tokenDescriptor);
 
-            return tokenHandler.WriteToken(token);
+                return tokenHandler.WriteToken(token);
+            }
+            catch (Exception exx)
+            {
+
+                throw;
+            }
+            
         }
     }
 }
