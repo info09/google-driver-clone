@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace AppCoreAPI.Services
@@ -41,18 +42,20 @@ namespace AppCoreAPI.Services
             };
             var tokenHandler = new JwtSecurityTokenHandler();
 
-            try
-            {
-                var token = tokenHandler.CreateToken(tokenDescriptor);
+            var token = tokenHandler.CreateToken(tokenDescriptor);
 
-                return tokenHandler.WriteToken(token);
-            }
-            catch (Exception exx)
-            {
+            return tokenHandler.WriteToken(token);
 
-                throw;
+        }
+
+        public async Task<string> GenerateRefreshToken()
+        {
+            var randomNumber = new byte[32];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(randomNumber);
+                return Convert.ToBase64String(randomNumber);
             }
-            
         }
     }
 }
