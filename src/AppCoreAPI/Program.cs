@@ -1,7 +1,6 @@
 using AppCoreAPI;
 using AppCoreAPI.Extensions;
 using AppCoreAPI.Middleware;
-using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 builder.Services.AddApplicationServices(builder.Configuration);
-builder.Services.AddIdentityServices();
+builder.Services.AddIdentityServices(builder.Configuration);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
