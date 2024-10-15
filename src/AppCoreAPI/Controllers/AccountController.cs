@@ -15,14 +15,16 @@ namespace AppCoreAPI.Controllers
     public class AccountController : ControllerBase
     {
         private readonly ITokenService _tokenService;
+        private readonly IGoogleDriveService _googleDriveService;
         private readonly IUnitOfWork _unitOfWork;
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IMapper _mapper;
 
-        public AccountController(ITokenService tokenService, IUnitOfWork unitOfWork, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IMapper mapper)
+        public AccountController(ITokenService tokenService, IGoogleDriveService googleDriveService, IUnitOfWork unitOfWork, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IMapper mapper)
         {
             _tokenService = tokenService;
+            _googleDriveService = googleDriveService;
             _unitOfWork = unitOfWork;
             _userManager = userManager;
             _signInManager = signInManager;
@@ -81,8 +83,8 @@ namespace AppCoreAPI.Controllers
             if (await _unitOfWork.Complete())
             {
                 // tao thu muc root
-                //var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", rootFolder.Name);
-                //await _googleDriveService.CreateDirectory(path);
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", rootFolder.Name);
+                await _googleDriveService.CreateDirectory(path);
 
                 return Ok(new UserDto
                 {
