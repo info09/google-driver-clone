@@ -6,10 +6,12 @@ using AppCoreAPI.Helpers;
 using AppCoreAPI.SeedWorks.Interfaces;
 using AppCoreAPI.Services.Interfaces;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AppCoreAPI.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class SharedController : ControllerBase
